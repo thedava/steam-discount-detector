@@ -3,6 +3,7 @@
     "description": "Detects if steam has a discount for a specific app",
     "require": {
         "guzzlehttp/guzzle": "~6.0",
-        "symfony/dom-crawler": "~3.2"
+        "symfony/dom-crawler": "~3.2",
+        "symfony/css-selector": "^3.2"
     }
 }
