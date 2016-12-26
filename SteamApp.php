@@ -44,6 +44,16 @@ class SteamApp
     }
 
     /**
+     * Returns the ageCheck url
+     *
+     * @return string
+     */
+    public function getAgeCheckUrl()
+    {
+        return str_replace('.com/app/', '.com/agecheck/app/', $this->getUrl());
+    }
+
+    /**
      * @param string $url
      *
      * @return $this

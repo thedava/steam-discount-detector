@@ -14,6 +14,7 @@ if (empty($files)) {
     $files[] = glob(__DIR__ . '/apps/*.php');
 }
 
+// Collect outputs
 $outputs = [];
 foreach ($files as $file) {
     $outputs[$file] = [
@@ -32,6 +33,7 @@ foreach ($files as $file) {
     $outputs[$file]['output'] = $app->checkApp();
 }
 
+// Output
 foreach ($outputs as $file => $output) {
     $headline = 'App: ' . $output['basename'];
     echo $headline, PHP_EOL, str_repeat('=', strlen($headline)), PHP_EOL, PHP_EOL;
