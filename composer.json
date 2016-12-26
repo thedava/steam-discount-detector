@@ -5,5 +5,10 @@
         "guzzlehttp/guzzle": "~6.0",
         "symfony/dom-crawler": "~3.2",
         "symfony/css-selector": "^3.2"
+    },
+    "autoload": {
+        "classmap": [
+            "SteamApp.php"
+        ]
     }
 }
