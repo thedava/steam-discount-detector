@@ -12,7 +12,7 @@ return new SteamApp('GTA Online Cash Cards', 'http://store.steampowered.com/app/
     $client->request('GET', $app->getUrl());
 
     // POST age
-    $response = $client->request('POST', 'http://store.steampowered.com/agecheck/app/376850/', [
+    $response = $client->request('POST', $app->getAgeCheckUrl(), [
         'form_params'     => [
             'ageDay'   => mt_rand(1, 28),
             'ageMonth' => 'June',
@@ -28,17 +28,19 @@ return new SteamApp('GTA Online Cash Cards', 'http://store.steampowered.com/app/
 
     $result = [];
     $dropDown->filter('.game_area_purchase_game_dropdown_menu_item_text')->each(function (Crawler $element) use (&$result) {
-        $prefix = '[No Discount]';
-        $text = $element->html();
+        $discountPrice = null;
+        $text = $element->text();
 
+        // Exclude discount price
         if ($element->filter('.discount_original_price')->count() > 0) {
-            $prefix = '[DISCOUNT]';
-            $text = preg_replace('/<span(.*)<\/span> /', '', $text);
+            $discountPrice = $element->filter('.discount_original_price')->text();
+            $text = preg_replace('/<span(.*)<\/span> /', '', $element->html());
         }
 
-        $text = str_replace('GTA$', 'GTA$ ', $text);
-        $result[] = $prefix . ' ' . $text;
+        list($name, $price) = explode(' - ', $text);
+
+        $result[] = new Price(str_replace('GTA$', 'GTA$ ', $name), $price, $discountPrice);
     });
 
-    return implode(PHP_EOL, $result);
+    return $result;
 });

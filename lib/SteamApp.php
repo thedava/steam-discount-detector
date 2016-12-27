@@ -22,6 +22,11 @@ class SteamApp
     protected $check;
 
     /**
+     * @var int|Price[]
+     */
+    protected $prices = -1;
+
+    /**
      * SteamApp constructor.
      *
      * @param string   $name
@@ -103,9 +108,41 @@ class SteamApp
     }
 
     /**
+     * @return Price[]
+     */
+    public function getPrices()
+    {
+        if ($this->prices === -1) {
+            $this->prices = $this->checkApp();
+        }
+
+        return $this->prices;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPricesAsString()
+    {
+        $result = [];
+        foreach ($this->getPrices() as $price) {
+            $text = ($price->hasDiscount()) ? '[DISCOUNT]' : '[No Discount]';
+            $text .= ' ' . $price->getName() . ' => ' . $price->getCurrentPrice();
+
+            if ($price->hasDiscount()) {
+                $text .= ' (Original: ' . $price->getPrice() . ')';
+            }
+
+            $result[] = $text;
+        }
+
+        return implode(PHP_EOL, $result);
+    }
+
+    /**
      * Checks if the app has a discount
      *
-     * @return string
+     * @return Price[]
      */
     public function checkApp()
     {

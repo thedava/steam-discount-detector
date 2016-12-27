@@ -11,7 +11,7 @@ foreach ($argv as $i => $value) {
 
 // Load all apps if there is no valid file given
 if (empty($files)) {
-    $files[] = glob(__DIR__ . '/apps/*.php');
+    $files = glob(__DIR__ . '/apps/*.php');
 }
 
 // Collect outputs
@@ -30,7 +30,7 @@ foreach ($files as $file) {
     }
 
     $outputs[$file]['app'] = $app;
-    $outputs[$file]['output'] = $app->checkApp();
+    $outputs[$file]['output'] = $app->getPricesAsString();
 }
 
 // Output
