@@ -1,26 +1,15 @@
 <?php
 
-use GuzzleHttp\Client;
 use Symfony\Component\DomCrawler\Crawler;
 
-return new SteamApp('GTA Online Cash Cards', 'http://store.steampowered.com/app/376850/', function (SteamApp $app) {
-    $client = new Client([
-        'cookies' => true,
-    ]);
+return new SteamApp('GTA Online Cash Cards', 'http://store.steampowered.com/app/376850/', new DiscountCheck(function (DiscountCheck $check) {
+    $client = $check->getClient();
+    $app = $check->getSteamApp();
 
     // Initial request
     $client->request('GET', $app->getUrl());
 
-    // POST age
-    $response = $client->request('POST', $app->getAgeCheckUrl(), [
-        'form_params'     => [
-            'ageDay'   => mt_rand(1, 28),
-            'ageMonth' => 'June',
-            'ageYear'  => mt_rand(1970, 1989),
-        ],
-        'allow_redirects' => true,
-    ]);
-
+    $response = $app->performAgeCheck($client);
     $content = $response->getBody()->getContents();
 
     $dom = new Crawler($content);
@@ -43,4 +32,4 @@ return new SteamApp('GTA Online Cash Cards', 'http://store.steampowered.com/app/
     });
 
     return $result;
-});
+}));

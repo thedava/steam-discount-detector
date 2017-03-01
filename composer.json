@@ -9,7 +9,8 @@
     "autoload": {
         "classmap": [
             "lib/SteamApp.php",
-            "lib/Price.php"
+            "lib/Price.php",
+            "lib/DiscountCheck.php"
         ]
     },
     "require-dev": {

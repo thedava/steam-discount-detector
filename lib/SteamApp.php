@@ -1,5 +1,7 @@
 <?php
 
+use GuzzleHttp\Client;
+
 class SteamApp
 {
     /**
@@ -17,7 +19,7 @@ class SteamApp
     protected $name;
 
     /**
-     * @var callable
+     * @var DiscountCheck
      */
     protected $check;
 
@@ -29,11 +31,11 @@ class SteamApp
     /**
      * SteamApp constructor.
      *
-     * @param string   $name
-     * @param string   $url
-     * @param callable $check
+     * @param string        $name
+     * @param string        $url
+     * @param DiscountCheck $check
      */
-    public function __construct($name, $url, callable $check)
+    public function __construct($name, $url, DiscountCheck $check)
     {
         $this->name = $name;
         $this->url = $url;
@@ -89,25 +91,6 @@ class SteamApp
     }
 
     /**
-     * @return callable
-     */
-    public function getCheck()
-    {
-        return $this->check;
-    }
-
-    /**
-     * @param callable $check
-     *
-     * @return $this
-     */
-    public function setCheck($check)
-    {
-        $this->check = $check;
-        return $this;
-    }
-
-    /**
      * @return Price[]
      */
     public function getPrices()
@@ -146,6 +129,35 @@ class SteamApp
      */
     public function checkApp()
     {
-        return call_user_func($this->check, $this);
+        $client = new Client([
+            'cookies' => true,
+        ]);
+
+        return $this->check->invoke($this, $client);
+    }
+
+    /**
+     * Perform an age check for this app
+     *
+     * @param Client $client
+     *
+     * @return mixed|\Psr\Http\Message\ResponseInterface
+     */
+    public function performAgeCheck(Client $client)
+    {
+        $months = ['January', 'February', 'March', 'April', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        $month = $months[array_rand($months)];
+        $day = mt_rand(1, ($month == 'February') ? 28 : 30);
+        $year = mt_rand(date('Y') - 40, date('Y') - 22);
+
+        // POST age
+        return $client->request('POST', $this->getAgeCheckUrl(), [
+            'form_params'     => [
+                'ageDay'   => $day,
+                'ageMonth' => $month,
+                'ageYear'  => $year,
+            ],
+            'allow_redirects' => true,
+        ]);
     }
 }

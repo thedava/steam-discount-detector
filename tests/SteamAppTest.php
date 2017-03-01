@@ -4,9 +4,10 @@ class SteamAppTest extends PHPUnit_Framework_TestCase
 {
     protected function getSteamApp()
     {
-        return new SteamApp('PHPUnit', 'phpunit.de', function (SteamApp $app) {
+        return new SteamApp('PHPUnit', 'phpunit.de', new DiscountCheck(function (DiscountCheck $check) {
+            $app = $check->getSteamApp();
             return $app->getName() . ' - ' . $app->getUrl();
-        });
+        }));
     }
 
     public function testGetAgeCheckUrl()
