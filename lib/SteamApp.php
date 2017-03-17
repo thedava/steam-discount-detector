@@ -160,4 +160,67 @@ class SteamApp
             'allow_redirects' => true,
         ]);
     }
+
+    /**
+     * @param array $appFiles
+     *
+     * @return array
+     */
+    public static function getAppOutput(array $appFiles)
+    {
+        // Collect outputs
+        $outputs = [];
+        foreach ($appFiles as $file) {
+            $outputs[$file] = [
+                'basename' => basename($file),
+            ];
+
+            if (!file_exists($file)) {
+                $outputs[$file]['error'] = 'App file not found!';
+                continue;
+            }
+
+            /** @var SteamApp $app */
+            $app = include $file;
+
+            if (!$app instanceof SteamApp) {
+                $outputs[$file]['error'] = 'Not a valid app file!';
+                continue;
+            }
+
+            $outputs[$file]['app'] = $app;
+            $outputs[$file]['output'] = $app->getPricesAsString();
+        }
+
+        return $outputs;
+    }
+
+    /**
+     * @param array $appFiles
+     */
+    public static function printAppOutput(array $appFiles)
+    {
+        $outputs = static::getAppOutput($appFiles);
+
+        foreach ($outputs as $file => $output) {
+            $headline = 'App: ' . $output['basename'];
+            echo $headline, PHP_EOL, str_repeat('=', strlen($headline)), PHP_EOL, PHP_EOL;
+
+            if (isset($output['error'])) {
+                echo $output['error'], PHP_EOL;
+                echo 'File: ', $file, PHP_EOL;
+            } else {
+                /** @var SteamApp $app */
+                $app = $output['app'];
+                echo 'Name: ', $app->getName(), PHP_EOL;
+                echo 'Url: ', $app->getUrl(), PHP_EOL;
+
+                echo PHP_EOL, 'Output:', PHP_EOL, str_repeat('-', 8), PHP_EOL;
+                echo trim($output['output']), PHP_EOL;
+                echo str_repeat('-', 8), PHP_EOL;
+            }
+
+            echo PHP_EOL, PHP_EOL, PHP_EOL;
+        }
+    }
 }
