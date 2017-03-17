@@ -229,6 +229,6 @@ class SteamApp
      */
     public static function getAppsPath()
     {
-        return realpath(__DIR__ . '/../apps.php');
+        return realpath(__DIR__ . '/../apps');
     }
 }
