@@ -3,6 +3,13 @@ Detects if steam has a discount for a specific app
 
 [![Build Status](https://travis-ci.org/thedava/steam-discount-detector.svg?branch=master)](https://travis-ci.org/thedava/steam-discount-detector)
 
+### Installation
+
+## Via Composer
+```
+composer require thedava/steam-discount-detector
+```
+
 ### Usage
 
 ```
