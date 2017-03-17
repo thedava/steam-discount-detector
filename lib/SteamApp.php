@@ -223,4 +223,12 @@ class SteamApp
             echo PHP_EOL, PHP_EOL, PHP_EOL;
         }
     }
+    
+    /**
+     * @return string
+     */
+    public static function getAppsPath()
+    {
+        return realpath(__DIR__ . '/../apps.php');
+    }
 }
