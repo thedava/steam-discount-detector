@@ -68,14 +68,4 @@ class Price
     {
         return $this->getDiscountPrice() !== null;
     }
-
-    /**
-     * @return float|null
-     */
-    public function getCurrentPrice()
-    {
-        return ($this->hasDiscount())
-            ? $this->getDiscountPrice()
-            : $this->getPrice();
-    }
 }

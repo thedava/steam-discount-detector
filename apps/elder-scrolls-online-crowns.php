@@ -18,15 +18,22 @@ return new SteamApp('Elder Scrolls Online Crowns', 'http://store.steampowered.co
     $result = [];
     $dropDown->filter('.game_area_purchase_game_dropdown_menu_item_text')->each(function (Crawler $element) use (&$result) {
         $discountPrice = null;
+        $originalPrice = null;
         $text = $element->text();
 
         // Exclude discount price
         if ($element->filter('.discount_original_price')->count() > 0) {
-            $discountPrice = $element->filter('.discount_original_price')->text();
+            $originalPrice = $element->filter('.discount_original_price')->text();
             $text = preg_replace('/<span(.*)<\/span> /', '', $element->html());
         }
 
-        list($name, $crowns, $price) = explode(' - ', $text);
+        list(, $crowns, $price) = explode(' - ', $text);
+
+        // Map prices
+        if ($originalPrice !== null) {
+            $discountPrice = $price;
+            $price = $originalPrice;
+        }
 
         $result[] = new Price($crowns, $price, $discountPrice);
     });

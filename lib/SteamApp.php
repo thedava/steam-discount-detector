@@ -109,14 +109,11 @@ class SteamApp
     {
         $result = [];
         foreach ($this->getPrices() as $price) {
-            $text = ($price->hasDiscount()) ? '[DISCOUNT]' : '[No Discount]';
-            $text .= ' ' . $price->getName() . ' => ' . $price->getCurrentPrice();
-
             if ($price->hasDiscount()) {
-                $text .= ' (Original: ' . $price->getPrice() . ')';
+                $result[] = '[DISCOUNT] ' . $price->getName() . ' => ' . $price->getDiscountPrice() . ' (Original: ' . $price->getPrice() . ')';
+            } else {
+                $result[] = '[No Discount] ' . $price->getName() . ' => ' . $price->getPrice();
             }
-
-            $result[] = $text;
         }
 
         return implode(PHP_EOL, $result);
@@ -223,7 +220,7 @@ class SteamApp
             echo PHP_EOL, PHP_EOL, PHP_EOL;
         }
     }
-    
+
     /**
      * @return string
      */
