@@ -13,16 +13,4 @@ class PriceTest extends PHPUnit_Framework_TestCase
         $price = new Price('PHPUnit', 100, null);
         $this->assertFalse($price->hasDiscount());
     }
-
-    public function testGetCurrentPriceWithDiscount()
-    {
-        $price = new Price('PHPUnit', 100, 80);
-        $this->assertEquals(80, $price->getCurrentPrice());
-    }
-
-    public function testGetCurrentPriceWithoutDiscount()
-    {
-        $price = new Price('PHPUnit', 100, null);
-        $this->assertEquals(100, $price->getCurrentPrice());
-    }
 }
