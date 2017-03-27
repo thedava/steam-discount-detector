@@ -15,6 +15,9 @@ composer require thedava/steam-discount-detector
 ```
 php detect.php
 php detect.php <app file 1> <app file 2> <app file ...>
+
+php steam-discount-detector.phar
+php steam-discount-detector.phar <app file 1> <app file 2> <app file ...>
 ```
 
 
