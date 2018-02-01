@@ -1,6 +1,7 @@
 {
     "name": "thedava/steam-discount-detector",
     "description": "Detects if steam has a discount for a specific app",
+    "license": "GPL-3.0-or-later",
     "require": {
         "guzzlehttp/guzzle": "~6.0",
         "symfony/dom-crawler": "~3.2",
